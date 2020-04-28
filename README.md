@@ -16,7 +16,7 @@ buildscript{
         maven { url 'https://jitpack.io' }
     }
     dependencies{
-        classpath 'com.github.1van:pipe-gradle-plugin:1.0.0'
+        classpath 'com.github.Project5E:pipe-gradle-plugin:1.0.0'
     }
 }
 ```
