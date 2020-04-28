@@ -69,6 +69,7 @@ String channel = ChannelReaderUtil.getChannel(getApplicationContext());
 ---
 
 ### 注意事项：
+1. 暂只支持类UNIX系统上使用（本人没在Windows上试过）
 1. 所有配置项都是字符串，且必需
 1. 路径相关配置项推荐使用绝对路径
 1. toolsPath推荐放在一个公共的地方，其他项目可共用，且推荐把路径写在local.properties中（读取properties的工具类[utils.gradle]）
