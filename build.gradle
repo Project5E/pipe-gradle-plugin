@@ -1,0 +1,41 @@
+plugins {
+    id 'groovy'
+    id 'java'
+    id 'java-gradle-plugin'
+    id 'maven'
+    id 'maven-publish'
+}
+
+group 'com.github.1van'
+version '1.0.0'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    google()
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile 'com.android.tools.build:gradle:3.6.3'
+}
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = 'pipe'
+            implementationClass = 'io.ivan.pipe.GradlePlugin'
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri("${System.getenv("HOME")}/.m2/repository"))
+        }
+    }
+}
