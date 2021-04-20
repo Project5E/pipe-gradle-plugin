@@ -1,9 +1,9 @@
 package io.ivan.pipe
 
-import com.android.build.gradle.api.BaseVariant
+import com.android.build.gradle.internal.api.ApplicationVariantImpl
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.ProjectConfigurationException
 
 class GradlePlugin implements Plugin<Project> {
 
@@ -12,7 +12,7 @@ class GradlePlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         if (!project.plugins.hasPlugin("com.android.application")) {
-            throw new ProjectConfigurationException("[pipe]: plugin 'com.android.application' must be apply", null)
+            throw new GradleException("[pipe]: plugin 'com.android.application' must be apply")
         }
         applyExtension(project)
         applyTask(project)
@@ -24,7 +24,7 @@ class GradlePlugin implements Plugin<Project> {
 
     private void applyTask(Project project) {
         project.afterEvaluate {
-            project.android.applicationVariants.all { BaseVariant variant ->
+            project.android.applicationVariants.all { ApplicationVariantImpl variant ->
                 def variantName = variant.name.capitalize()
 
                 Task task = project.tasks.create("pipeAssemble${variantName}", Task) as Task

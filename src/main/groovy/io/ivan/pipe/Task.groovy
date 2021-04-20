@@ -1,14 +1,12 @@
 package io.ivan.pipe
 
-import com.android.build.gradle.api.BaseVariant
+import com.android.build.gradle.internal.api.ApplicationVariantImpl
 import com.android.builder.model.SigningConfig
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
-import org.gradle.api.ProjectConfigurationException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-
 
 class Task extends DefaultTask {
 
@@ -16,25 +14,25 @@ class Task extends DefaultTask {
     private static final String PROTECT_TYPE = "360"
 
     @Input
-    public BaseVariant variant
+    public ApplicationVariantImpl variant
     @Input
     public Project targetProject
 
-    def jiaguJava
-    def jiaguFile
-    def jiaguCommand
+    String jiaguJava
+    String jiaguFile
+    String jiaguCommand
 
-    def apksignerFile
-    def apksignerCommand
+    String apksignerFile
+    String apksignerCommand
 
-    def vasDollyFile
-    def vasDollyCommand
+    String vasDollyFile
+    String vasDollyCommand
 
-    def apkFilePath
-    def baseApkFilePath
-    def buildPath
-    def tempApkPath
-    def tempDirPath
+    String apkFilePath
+    String baseApkFilePath
+    String buildPath
+    String tempApkPath
+    String tempDirPath
 
     void setup() {
         def extension = Extension.getConfig(targetProject)
@@ -76,29 +74,21 @@ class Task extends DefaultTask {
     private void checkParameter() {
         def extension = Extension.getConfig(project)
         if (StringUtils.isEmpty(extension.apkOutputFolder)) {
-            throw new ProjectConfigurationException("[pipe]: apkOutputFolder is not configured!", null)
+            throw new GradleException("[pipe]: apkOutputFolder is not configured , please check it !")
         }
         if (StringUtils.isEmpty(extension.channelFile)) {
-            throw new ProjectConfigurationException("[pipe]: channelFile is not configured!", null)
+            throw new GradleException("[pipe]: channelFile is not configured , please check it !")
         }
         if (StringUtils.isEmpty(extension.toolsPath)) {
-            throw new ProjectConfigurationException("[pipe]: toolsPath is not configured!", null)
+            throw new GradleException("[pipe]: toolsPath is not configured , please check it !")
         }
         if (getSigningConfig() == null) {
-            throw new GradleException("[pipe]: SigningConfig is null , please check it")
+            throw new GradleException("[pipe]: SigningConfig is null , please check it !")
         }
     }
 
     SigningConfig getSigningConfig() {
-        //return mVariant.buildType.signingConfig == null ? mVariant.mergedFlavor.signingConfig : mVariant.buildType.signingConfig
-        SigningConfig config = null
-        try {
-            config = variant.variantData.variantConfiguration.signingConfig
-        } catch (Throwable e) {
-            config = variant.apkVariantData.variantConfiguration.signingConfig
-            //  e.printStackTrace()
-        }
-        return config
+        return variant.buildType.signingConfig == null ? variant.mergedFlavor.signingConfig : variant.buildType.signingConfig
     }
 
     private void initPath(File apkFile) {
