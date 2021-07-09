@@ -6,6 +6,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 class Task extends DefaultTask {
@@ -13,26 +14,24 @@ class Task extends DefaultTask {
     private static final String DOT_APK = ".apk"
     private static final String PROTECT_TYPE = "360"
 
-    @Input
-    public ApplicationVariantImpl variant
-    @Input
-    public Project targetProject
+    @Input ApplicationVariantImpl variant
+    @Input Project targetProject
 
-    String jiaguJava
-    String jiaguFile
-    String jiaguCommand
+    @Internal String jiaguJava
+    @Internal String jiaguFile
+    @Internal String jiaguCommand
 
-    String apksignerFile
-    String apksignerCommand
+    @Internal String apksignerFile
+    @Internal String apksignerCommand
 
-    String vasDollyFile
-    String vasDollyCommand
+    @Internal String vasDollyFile
+    @Internal String vasDollyCommand
 
-    String apkFilePath
-    String baseApkFilePath
-    String buildPath
-    String tempApkPath
-    String tempDirPath
+    @Internal String apkFilePath
+    @Internal String baseApkFilePath
+    @Internal String buildPath
+    @Internal String tempApkPath
+    @Internal String tempDirPath
 
     void setup() {
         def extension = Extension.getConfig(targetProject)
@@ -87,6 +86,7 @@ class Task extends DefaultTask {
         }
     }
 
+    @Internal
     SigningConfig getSigningConfig() {
         return variant.buildType.signingConfig == null ? variant.mergedFlavor.signingConfig : variant.buildType.signingConfig
     }
